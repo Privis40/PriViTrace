@@ -1,112 +1,108 @@
-#!/usr/bin/env python3
-import phonenumbers
-from phonenumbers import geocoder, carrier, timezone
-from colorama import Fore, Style, init
-import urllib.parse
-import folium
-import os
+parsed = phonenumbers.parse(phone_number, "NG") 
+    ```
+    This allows the script to handle both `+234` and local `080` formats seamlessly.
 
-init(autoreset=True)
+### 3. Missing Exception Details
+Your `except Exception:` block at the end of the `scan` method is too broad. It catches every error (including typos in your code) and simply tells the user to use the international format. 
+*   **Improvement:** You should print the actual error during debugging or catch `phonenumbers.phonenumberutil.NumberParseException` specifically.
 
-# Manual Override Database for Nigerian Mobile Blocks
-# This ensures 091/090 prefixes are identified even if the library is old.
-NG_CARRIERS = {
-    "911": "Airtel Nigeria", "912": "Airtel Nigeria", "901": "Airtel Nigeria", 
-    "902": "Airtel Nigeria", "904": "Airtel Nigeria", "907": "Airtel Nigeria",
-    "913": "MTN Nigeria", "916": "MTN Nigeria", "903": "MTN Nigeria", 
-    "906": "MTN Nigeria", "803": "MTN Nigeria", "806": "MTN Nigeria",
-    "909": "9mobile", "908": "9mobile", "809": "9mobile", "817": "9mobile",
-    "905": "Globacom", "915": "Globacom", "805": "Globacom", "705": "Globacom"
-}
+### 4. Dependency Warning
+The script relies on `folium` and `phonenumbers`. If a user runs this without those installed, it crashes immediately.
+*   This script is a solid OSINT (Open Source Intelligence) tool, particularly well-tailored for the Nigerian telecom landscape. However, there are a few technical bugs, logical oversights, and "quality of life" improvements that would make it more robust.
 
-class PriViElite:
-    def __init__(self):
-        self.banner = (
-            f"\n{Fore.CYAN}  ██████╗ ██████╗ ██╗██╗   ██╗██╗███████╗███████╗ ██████╗\n"
-            f"{Fore.CYAN}  ██╔══██╗██╔══██╗██║██║   ██║██║██╔════╝██╔════╝██╔════╝\n"
-            f"{Fore.CYAN}  ██████╔╝██████╔╝██║██║   ██║██║███████╗█████╗  ██║     \n"
-            f"{Fore.CYAN}  ██╔═══╝ ██╔══██╗██║╚██╗ ██╔╝ ██║╚════██║██╔══╝  ██║     \n"
-            f"{Fore.CYAN}  ██║     ██║  ██║██║ ╚████╔╝  ██║███████║███████╗╚██████╗\n"
-            f"{Fore.RED}  PriViSecurity 🛡️ | ELITE RECON v7.0 | Advanced OSINT Suite\n"
-            f"{Fore.YELLOW}  {'=' * 65}\n"
-        )
+### 1. Critical Bug: The `urllib.parse` usage
+In your "Advanced Dorking" section, you use `urllib.parse.quote(query)`. While this is correct for the URL, you aren't actually using the `urllib` library to fetch data; you are just printing a link.
+*   **The Bug:** If the user’s input has trailing spaces or non-standard characters, `phonenumbers.parse` might fail before it even gets to the dorking logic.
+*   **The Fix:** Ensure the `raw` variable is strictly digits before appending it to the search strings.
 
-    def generate_intel_map(self, location_name, number):
-        print(f"{Fore.YELLOW}[*] Generating Geospatial Intelligence Map...")
-        try:
-            # Regional Coordinates for Nigeria
-            coords = [9.0820, 8.6753] # Default center
-            if "Lagos" in location_name: coords = [6.5244, 3.3792]
-            elif "Abuja" in location_name: coords = [9.0765, 7.3986]
-            
-            m = folium.Map(location=coords, zoom_start=10, control_scale=True)
-            folium.Marker(
-                coords, 
-                popup=f"Target: {number}<br>Area: {location_name}", 
-                icon=folium.Icon(color='red', icon='screenshot', prefix='fa')
-            ).add_to(m)
-            
-            map_name = "privi_recon_map.html"
-            m.save(map_name)
-            print(f"{Fore.GREEN}[+] Mapping Complete: {os.path.abspath(map_name)}")
-        except Exception as e:
-            print(f"{Fore.RED}[!] Map Error: {e}")
+### 2. Logic Error: Global Format Handling
+The line `parsed = phonenumbers.parse(phone_number, None)` works fine if the user inputs a `+` country code. However, if a user inputs a local Nigerian number (e.g., `0803...`), the script will throw an exception because the default region is `None`.
+*   **Fix:** Change the parsing logic to:
+    ```python
+    parsed = phonenumbers.parse(phone_number, "NG") 
+    ```
+    This allows the script to handle both `+234` and local `080` formats seamlessly.
 
-    def scan(self, phone_number):
-        try:
-            parsed = phonenumbers.parse(phone_number, None)
-            clean = phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
-            raw = clean.replace("+", "")
-            
-            print(self.banner)
-            print(f"{Fore.GREEN}[+] DEEP ANALYSIS INITIALIZED: {phone_number}")
-            print(f"{Fore.CYAN}{'=' * 45}")
+### 3. Missing Exception Details
+Your `except Exception:` block at the end of the `scan` method is too broad. It catches every error (including typos in your code) and simply tells the user to use the international format. 
+*   **Improvement:** You should print the actual error during debugging or catch `phonenumbers.phonenumberutil.NumberParseException` specifically.
 
-            # 1. Network Intel
-            provider = carrier.name_for_number(parsed, "en")
-            if not provider and parsed.country_code == 234:
-                prefix = str(parsed.national_number)[:3]
-                provider = NG_CARRIERS.get(prefix, "Private/Internal Block")
+### 4. Dependency Warning
+The script relies on `folium` and `phonenumbers`. If a user runs this without those installed, it crashes immediately.
+*   **Recommendation:** Add a simple check or a `requirements.txt` file.
 
-            print(f"{Fore.WHITE}[-] Network Service : {Fore.YELLOW}{provider}")
-            print(f"{Fore.WHITE}[-] Node Timezone    : {Fore.YELLOW}{timezone.time_zones_for_number(parsed)}")
+### 5. Social Link Formatting
+For **Telegram**, the URL `[https://t.meThis](https://t.meThis) script is a solid OSINT (Open Source Intelligence) tool, particularly well-tailored for the Nigerian telecom landscape. However, there are a few technical bugs, logical oversights, and "quality of life" improvements that would make it more robust.
 
-            # 2. Digital Footprint (Social Recon)
-            print(f"\n{Fore.CYAN}[*] SOCIAL & DIGITAL FOOTPRINT:")
-            socials = {
-                "WhatsApp": f"https://wa.me/{raw}",
-                "LinkedIn": f"https://www.linkedin.com/search/results/all/?keywords={raw}",
-                "TrueCaller": f"https://www.truecaller.com/search/global/{raw}",
-                "Facebook": f"https://www.facebook.com/search/top/?q={raw}",
-                "Instagram": f"https://www.instagram.com/search/?q={raw}",
-                "Telegram": f"https://t.me/+{raw}"
-            }
-            for site, url in socials.items():
-                print(f"{Fore.WHITE}{site.ljust(12)}: {Fore.BLUE}{url}")
+### 1. Critical Bug: The `urllib.parse` usage
+In your "Advanced Dorking" section, you use `urllib.parse.quote(query)`. While this is correct for the URL, you aren't actually using the `urllib` library to fetch data; you are just printing a link.
+*   **The Bug:** If the user’s input has trailing spaces or non-standard characters, `phonenumbers.parse` might fail before it even gets to the dorking logic.
+*   **The Fix:** Ensure the `raw` variable is strictly digits before appending it to the search strings.
 
-            # 3. Advanced Dorking (The "Pinpointer")
-            print(f"\n{Fore.RED}[!] FORUM RECON (Searching Nairaland/Jiji/LinkedIn):")
-            query = f"site:nairaland.com OR site:jiji.ng OR site:linkedin.com \"{raw}\""
-            dork_url = f"https://www.google.com/search?q={urllib.parse.quote(query)}"
-            print(f"{Fore.YELLOW}Intelligence Dork: {dork_url}")
+### 2. Logic Error: Global Format Handling
+The line `parsed = phonenumbers.parse(phone_number, None)` works fine if the user inputs a `+` country code. However, if a user inputs a local Nigerian number (e.g., `0803...`), the script will throw an exception because the default region is `None`.
+*   **Fix:** Change the parsing logic to:
+    ```python
+    parsed = phonenumbers.parse(phone_number, "NG") 
+    ```
+    This allows the script to handle both `+234` and local `080` formats seamlessly.
 
-            # 4. Map Generation
-            location = geocoder.description_for_number(parsed, "en")
-            self.generate_intel_map(location if location else "Nigeria", phone_number)
+### 3. Missing Exception Details
+Your `except Exception:` block at the end of the `scan` method is too broad. It catches every error (including typos in your code) and simply tells the user to use the international format. 
+*   **Improvement:** You should print the actual error during debugging or catch `phonenumbers.phonenumberutil.NumberParseException` specifically.
 
-            # 5. Cell Tower Data (Estimated)
-            print(f"\n{Fore.MAGENTA}[!] CELL TOWER INTEL (Estimated):")
-            print(f"{Fore.WHITE}Primary MCC: {Fore.YELLOW}621 (Nigeria)")
-            print(f"{Fore.WHITE}Network MNC: {Fore.YELLOW}Connected to local node")
+### 4. Dependency Warning
+The script relies on `folium` and `phonenumbers`. If a user runs this without those installed, it crashes immediately.
+*   **Recommendation:** Add a simple check or a `requirements.txt` file.
 
-        except Exception:
-            print(f"{Fore.RED}[!] Use international format (e.g., +234...)")
+### 5. Social Link Formatting
+For **Telegram**, the URL `[https://t.me/](https://t.me/)+{raw}` is slightly off. Telegram links usually don't require the `+` in the URL string; `[https://t.me/numberThis](https://t.me/numberThis) script is a solid OSINT (Open Source Intelligence) tool, particularly well-tailored for the Nigerian telecom landscape. However, there are a few technical bugs, logical oversights, and "quality of life" improvements that would make it more robust.
 
-def main():
-    scanner = PriViElite()
-    target = input(f"{Fore.WHITE}Enter Target Number: ").strip()
-    if target: scanner.scan(target)
+### 1. Critical Bug: The `urllib.parse` usage
+In your "Advanced Dorking" section, you use `urllib.parse.quote(query)`. While this is correct for the URL, you aren't actually using the `urllib` library to fetch data; you are just printing a link.
+*   **The Bug:** If the user’s input has trailing spaces or non-standard characters, `phonenumbers.parse` might fail before it even gets to the dorking logic.
+*   **The Fix:** Ensure the `raw` variable is strictly digits before appending it to the search strings.
 
-if __name__ == "__main__":
-    main()
-            
+### 2. Logic Error: Global Format Handling
+The line `parsed = phonenumbers.parse(phone_number, None)` works fine if the user inputs a `+` country code. However, if a user inputs a local Nigerian number (e.g., `0803...`), the script will throw an exception because the default region is `None`.
+*   **Fix:** Change the parsing logic to:
+    ```python
+    parsed = phonenumbers.parse(phone_number, "NG") 
+    ```
+    This allows the script to handle both `+234` and local `080` formats seamlessly.
+
+### 3. Missing Exception Details
+Your `except Exception:` block at the end of the `scan` method is too broad. It catches every error (including typos in your code) and simply tells the user to use the international format. 
+*   **Improvement:** You should print the actual error during debugging or catch `phonenumbers.phonenumberutil.NumberParseException` specifically.
+
+### 4. Dependency Warning
+The script relies on `folium` and `phonenumbers`. If a user runs this without those installed, it crashes immediately.
+*   **Recommendation:** Add a simple check or a `requirements.txt` file.
+
+### 5. Social Link Formatting
+For **Telegram**, the URL `[https://t.me/](https://t.me/)+{raw}` is slightly off. Telegram links usually don't require the `+` in the URL string; `[https://t.me/number](https://t.me/number)` works, but more reliably, Telegram uses the format `[https://t.me/](https://t.me/)<username>`. Since you only have the number, `[https://wa.me/](https://wa.me/)` is a better comparison. Note that Telegram phone searches via URL are often restricted by privacy settings.
+
+---
+
+### Optimized Code Snippet
+Here are the specific sections I recommend updating:
+
+```python
+# ... inside the scan method ...
+try:
+    # Set default region to NG (Nigeria) so 080... numbers don't crash the script
+    parsed = phonenumbers.parse(phone_number, "NG")
+    
+    if not phonenumbers.is_valid_number(parsed):
+        print(f"{Fore.RED}[!] Error: The number provided is not valid.")
+        return
+
+    clean = phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+    raw = clean.replace("+", "")
+    
+    # ... rest of your code ...
+
+except phonenumbers.phonenumberutil.NumberParseException:
+    print(f"{Fore.RED}[!] Parsing Error: Please use international format (e.g., +234...) or a valid local number.")
+except Exception as e:
+    print(f"{Fore.RED}[!] An unexpected error occurred: {e}")
