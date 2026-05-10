@@ -1,4 +1,4 @@
-# 🛡️ PriVi_EliteScanner v7.0
+# 🛡️ PriVi_Elite_Phone.No_Scanner v1.0
 **Advanced Phone OSINT & Geospatial Intelligence Suite**
 
 Developed by Prince Ubebe, PriVi_EliteScanner is a professional reconnaissance tool for deep-dive investigations. 
