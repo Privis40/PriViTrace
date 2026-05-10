@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PriViSecurity | ELITE RECON v7.5
+PriViSecurity | ELITE RECON v1.0
 Advanced OSINT & Social Intelligence Suite
 """
 
@@ -33,7 +33,7 @@ class PriViElitePro:
             f"{Fore.CYAN}  ██████╔╝██████╔╝██║██║   ██║██║███████╗█████╗  ██║     \n"
             f"{Fore.CYAN}  ██╔═══╝ ██╔══██╗██║╚██╗ ██╔╝ ██║╚════██║██╔══╝  ██║     \n"
             f"{Fore.CYAN}  ██║     ██║  ██║██║ ╚████╔╝  ██║███████║███████╗╚██████╗\n"
-            f"{Fore.RED}  PriViSecurity 🛡️ | SOCIAL RECON v7.5 | OSINT Suite 2026\n"
+            f"{Fore.RED}  PriViSecurity 🛡️ | SOCIAL RECON v1.0 | OSINT Suite 2026\n"
             f"{Fore.YELLOW}  {'=' * 65}\n"
         )
 
