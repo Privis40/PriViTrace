@@ -2,7 +2,7 @@
 
 # 🛡️ PriVi Elite Phone Scanner: Developed by PriViSecurity
 
-![PriVi Elite Phone Scanner](PriVi-Phone-Scanner.PNG)
+![PriVi Elite Phone Scanner](PriVi-Phone.PNG)
 
 </div>
 
