@@ -1,3 +1,0 @@
-phonenumbers
-colorama
-folium
