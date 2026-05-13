@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ PriVi Elite Phone Scanner: Developed by PriViSecurity
+# 🛡️ PriViTrace: Developed by PriViSecurity
 
 ![PriVi Elite Phone Scanner](PriVi-Phone.PNG)
 
