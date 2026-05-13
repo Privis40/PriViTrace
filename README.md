@@ -59,8 +59,8 @@ pip install phonenumbers folium colorama
 ## Installation
 
 ```bash
-git clone https://github.com/Privis40/PriVi_Elite_Phone.No_Scanner.git
-cd "PriVi_Elite_Phone.No_Scanner"
+git clone https://github.com/Privis40/PriViTrace.git
+cd "PriViTrace"
 pip install -r requirements.txt
 ```
 
@@ -69,7 +69,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-python3 priviphone.py
+python3 privitrace.py
 ```
 
 Enter the target phone number in international format when prompted:
@@ -154,7 +154,7 @@ All intelligence is derived from publicly available number metadata and open-sou
 ## Author & Brand
 
 **Prince Ubebe**
-Cybersecurity Analyst | Security Automation Engineer | Founder, PriViSecurity
+Cybersecurity Analyst | Security Automation Engineer
 
 - GitHub: [github.com/Privis40](https://github.com/Privis40)
 - LinkedIn: [linkedin.com/in/prince-ubebe-291573321](https://www.linkedin.com/in/prince-ubebe-291573321)
