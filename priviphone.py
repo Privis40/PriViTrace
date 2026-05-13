@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════════╗
-║       PriVi Elite Phone Scanner v2.0                             ║
+║       PriVi Elite Phone Scanner v1.0                             ║
 ║       Advanced Phone Number OSINT & Intelligence Suite           ║
 ║       Developed by Prince Ubebe | PriViSecurity                  ║
 ╚══════════════════════════════════════════════════════════════════╝
